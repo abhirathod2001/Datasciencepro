@@ -2,75 +2,89 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-const STORAGE_KEY = 'dsml_hub_user_dashboard_v1';
+const STORAGE_KEY = 'dsml_hub_user_dashboard_v2';
 
 const syllabus = [
   {
-    key: 'python',
-    icon: '💻',
-    title: 'Python for Data Science',
-    level: 'Beginner',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+Python+for+Data+Science+Pandas+NumPy',
-    theory: 'Python is the main programming language used in data science because it is simple, readable, and supported by powerful libraries. A data science student should learn variables, loops, functions, lists, dictionaries, file handling, NumPy arrays, Pandas DataFrames, Matplotlib charts, and basic automation. The most important practical skill is converting raw data into clean tables that can be analyzed repeatedly.',
-    bullets: ['Python syntax and functions', 'Pandas DataFrames', 'NumPy arrays', 'Data cleaning', 'Exploratory data analysis'],
+    key: 'python', icon: '💻', title: 'Python for Data Science', level: 'Beginner', video: 'https://www.youtube.com/results?search_query=Krish+Naik+Python+for+Data+Science+Pandas+NumPy',
+    theory: 'Python is the main programming language used in data science because it is simple, readable, and supported by powerful libraries. A data science student should learn variables, loops, functions, lists, dictionaries, file handling, NumPy arrays, Pandas DataFrames, Matplotlib charts, and basic automation.',
+    subtopics: [
+      { title: 'Python Syntax & Functions', theory: 'Python syntax is designed to be readable. Functions help you reuse logic, reduce repetition, and organize analysis workflows. In data science, functions are useful for cleaning columns, transforming values, loading files, and building repeatable reports.' },
+      { title: 'Pandas DataFrames', theory: 'Pandas DataFrames are table-like structures used for data cleaning and analysis. You can filter rows, select columns, handle missing values, group data, merge datasets, and export results.' },
+      { title: 'NumPy Arrays', theory: 'NumPy provides fast numerical arrays. It is useful for vectorized calculations, mathematical operations, matrix work, and preparing data for machine learning libraries.' },
+      { title: 'Data Cleaning', theory: 'Data cleaning fixes missing values, duplicates, wrong data types, inconsistent labels, outliers, and invalid entries. Clean data improves model quality and decision accuracy.' },
+      { title: 'Exploratory Data Analysis', theory: 'EDA is the process of understanding data before modeling. It includes summary statistics, charts, distribution checks, correlation analysis, and business interpretation.' },
+    ],
   },
   {
-    key: 'statistics',
-    icon: '📊',
-    title: 'Statistics & Probability',
-    level: 'Core',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+Statistics+for+Data+Science',
-    theory: 'Statistics helps you understand variation, uncertainty, and patterns in data. Data scientists use statistics to summarize datasets, compare groups, test assumptions, and make decisions from samples. Core concepts include mean, median, mode, variance, standard deviation, probability, distributions, sampling, confidence intervals, p-values, and hypothesis testing.',
-    bullets: ['Descriptive statistics', 'Probability distributions', 'Sampling', 'Hypothesis testing', 'Confidence intervals'],
+    key: 'statistics', icon: '📊', title: 'Statistics & Probability', level: 'Core', video: 'https://www.youtube.com/results?search_query=Krish+Naik+Statistics+for+Data+Science',
+    theory: 'Statistics helps you understand variation, uncertainty, and patterns in data. Data scientists use statistics to summarize datasets, compare groups, test assumptions, and make decisions from samples.',
+    subtopics: [
+      { title: 'Descriptive Statistics', theory: 'Descriptive statistics summarize data using mean, median, mode, range, variance, standard deviation, percentiles, and quartiles. These values help you quickly understand central tendency and spread.' },
+      { title: 'Probability Basics', theory: 'Probability measures the chance of an event. It supports decision-making under uncertainty and is the foundation for distributions, sampling, and statistical inference.' },
+      { title: 'Distributions', theory: 'Distributions describe how values are spread. Normal, binomial, and Poisson distributions are common in data science and help model real-world uncertainty.' },
+      { title: 'Hypothesis Testing', theory: 'Hypothesis testing compares evidence against a null hypothesis. It helps determine whether observed differences are likely meaningful or caused by random variation.' },
+      { title: 'Confidence Intervals', theory: 'A confidence interval gives a plausible range for a population parameter. It communicates uncertainty better than a single estimate.' },
+    ],
   },
   {
-    key: 'sql',
-    icon: '🗄️',
-    title: 'SQL for Data Science',
-    level: 'Beginner',
-    video: 'https://www.youtube.com/results?search_query=Satish+Dhawale+SQL+full+course',
-    theory: 'SQL is used to collect data from databases before analysis or machine learning. A data scientist should be comfortable writing SELECT queries, filtering rows with WHERE, joining tables, grouping data, calculating aggregates, using HAVING, writing CTEs, and applying window functions. SQL is critical because most company data lives in relational databases.',
-    bullets: ['SELECT and WHERE', 'JOINs', 'GROUP BY and HAVING', 'CTEs', 'Window functions'],
+    key: 'sql', icon: '🗄️', title: 'SQL for Data Science', level: 'Beginner', video: 'https://www.youtube.com/results?search_query=Satish+Dhawale+SQL+full+course',
+    theory: 'SQL is used to collect data from databases before analysis or machine learning. A data scientist should be comfortable writing queries, joining tables, grouping data, and applying window functions.',
+    subtopics: [
+      { title: 'SELECT and WHERE', theory: 'SELECT chooses columns and WHERE filters rows. These are the first commands used to extract meaningful subsets of data from large tables.' },
+      { title: 'JOINs', theory: 'JOINs combine rows from multiple tables using common keys. Inner, left, right, and full joins help connect customer, order, product, and event data.' },
+      { title: 'GROUP BY and HAVING', theory: 'GROUP BY summarizes rows into groups. HAVING filters grouped results, such as customers with more than five orders or products with high revenue.' },
+      { title: 'CTEs', theory: 'Common Table Expressions make SQL readable by breaking a complex query into named steps. They are useful for analytics pipelines and debugging.' },
+      { title: 'Window Functions', theory: 'Window functions calculate ranks, running totals, moving averages, and lag values without collapsing rows. They are powerful for time-based analysis.' },
+    ],
   },
   {
-    key: 'ml',
-    icon: '🧠',
-    title: 'Machine Learning',
-    level: 'Intermediate',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+Machine+Learning+full+course',
-    theory: 'Machine learning is the process of training algorithms to learn patterns from data and make predictions. Important categories include supervised learning, unsupervised learning, regression, classification, clustering, and recommendation systems. A strong ML workflow includes feature preparation, train-test split, model training, evaluation, tuning, and interpretation.',
-    bullets: ['Regression', 'Classification', 'Clustering', 'Model evaluation', 'Overfitting and underfitting'],
+    key: 'ml', icon: '🧠', title: 'Machine Learning', level: 'Intermediate', video: 'https://www.youtube.com/results?search_query=Krish+Naik+Machine+Learning+full+course',
+    theory: 'Machine learning trains algorithms to learn patterns from data and make predictions. A strong ML workflow includes feature preparation, train-test split, model training, evaluation, tuning, and interpretation.',
+    subtopics: [
+      { title: 'Regression', theory: 'Regression predicts continuous values such as price, revenue, temperature, or demand. Common models include linear regression, ridge, lasso, and tree-based regressors.' },
+      { title: 'Classification', theory: 'Classification predicts categories such as spam/not spam, churn/no churn, or fraud/not fraud. Metrics include accuracy, precision, recall, F1-score, and ROC-AUC.' },
+      { title: 'Clustering', theory: 'Clustering groups similar records without labels. It is useful for customer segmentation, anomaly discovery, and pattern exploration.' },
+      { title: 'Model Evaluation', theory: 'Model evaluation checks whether a model generalizes to unseen data. Use train-test splits, cross-validation, and metrics aligned with the business problem.' },
+      { title: 'Overfitting and Underfitting', theory: 'Overfitting means the model memorizes training data. Underfitting means the model is too simple. Good models balance bias and variance.' },
+    ],
   },
   {
-    key: 'dl',
-    icon: '🕸️',
-    title: 'Deep Learning',
-    level: 'Advanced',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+Deep+Learning+full+course',
-    theory: 'Deep learning uses neural networks to solve complex tasks such as image recognition, speech processing, NLP, and generative AI. Students should learn neurons, layers, activation functions, loss functions, gradient descent, backpropagation, CNNs, RNNs, transformers, and practical training concepts like epochs, batch size, and learning rate.',
-    bullets: ['Neural networks', 'Activation functions', 'Backpropagation', 'CNNs and RNNs', 'Transformers'],
+    key: 'dl', icon: '🕸️', title: 'Deep Learning', level: 'Advanced', video: 'https://www.youtube.com/results?search_query=Krish+Naik+Deep+Learning+full+course',
+    theory: 'Deep learning uses neural networks to solve complex tasks such as image recognition, speech processing, NLP, and generative AI.',
+    subtopics: [
+      { title: 'Neural Networks', theory: 'Neural networks contain layers of connected neurons. They learn patterns by adjusting weights during training.' },
+      { title: 'Activation Functions', theory: 'Activation functions such as ReLU, sigmoid, and tanh add non-linearity, allowing neural networks to learn complex relationships.' },
+      { title: 'Backpropagation', theory: 'Backpropagation calculates gradients and updates weights to reduce error. It is central to training deep learning models.' },
+      { title: 'CNNs and RNNs', theory: 'CNNs are useful for images. RNNs and sequence models are used for ordered data such as text and time series.' },
+      { title: 'Transformers', theory: 'Transformers use attention mechanisms and power modern LLMs, translation systems, summarization, and many Gen AI applications.' },
+    ],
   },
   {
-    key: 'nlp',
-    icon: '💬',
-    title: 'Natural Language Processing',
-    level: 'Advanced',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+NLP+full+course',
-    theory: 'Natural Language Processing focuses on understanding and generating human language. It includes text cleaning, tokenization, stemming, lemmatization, embeddings, sentiment analysis, text classification, transformers, and large language models. NLP is important for chatbots, document search, summarization, and AI assistants.',
-    bullets: ['Text preprocessing', 'Tokenization', 'Embeddings', 'Sentiment analysis', 'Transformers and LLMs'],
+    key: 'nlp', icon: '💬', title: 'Natural Language Processing', level: 'Advanced', video: 'https://www.youtube.com/results?search_query=Krish+Naik+NLP+full+course',
+    theory: 'Natural Language Processing focuses on understanding and generating human language. It is important for chatbots, document search, summarization, and AI assistants.',
+    subtopics: [
+      { title: 'Text Preprocessing', theory: 'Text preprocessing removes noise, lowercases text, handles punctuation, removes stopwords, and prepares text for modeling.' },
+      { title: 'Tokenization', theory: 'Tokenization splits text into words, subwords, or characters. It is the first step in many NLP pipelines.' },
+      { title: 'Embeddings', theory: 'Embeddings convert text into numerical vectors that capture meaning. They are used for search, clustering, similarity, and RAG.' },
+      { title: 'Sentiment Analysis', theory: 'Sentiment analysis detects positive, negative, or neutral opinion in text. It is common in reviews, social media, and customer feedback.' },
+      { title: 'LLMs', theory: 'Large Language Models generate and understand text. They are used for Q&A, summarization, code generation, and AI assistants.' },
+    ],
   },
   {
-    key: 'genai',
-    icon: '✨',
-    title: 'Generative AI',
-    level: 'Advanced',
-    video: 'https://www.youtube.com/results?search_query=Krish+Naik+Generative+AI+RAG+Agents',
-    theory: 'Generative AI creates new text, code, images, summaries, and answers from learned patterns. For data science students, key topics include LLMs, prompt engineering, embeddings, vector databases, retrieval augmented generation, AI agents, tool use, evaluation, and responsible AI. Gen AI is useful for analytics assistants, document Q&A, SQL generation, and report automation.',
-    bullets: ['Prompt engineering', 'LLMs', 'Embeddings', 'RAG', 'AI agents'],
+    key: 'genai', icon: '✨', title: 'Generative AI', level: 'Advanced', video: 'https://www.youtube.com/results?search_query=Krish+Naik+Generative+AI+RAG+Agents',
+    theory: 'Generative AI creates new text, code, images, summaries, and answers from learned patterns. It is useful for analytics assistants, document Q&A, SQL generation, and report automation.',
+    subtopics: [
+      { title: 'Prompt Engineering', theory: 'Prompt engineering designs clear instructions for LLMs. Good prompts include context, goal, format, constraints, and examples.' },
+      { title: 'LLMs', theory: 'LLMs are trained on large text datasets and can answer questions, summarize documents, generate code, and explain concepts.' },
+      { title: 'Vector Databases', theory: 'Vector databases store embeddings and support semantic search. They are key infrastructure for RAG applications.' },
+      { title: 'RAG', theory: 'Retrieval Augmented Generation combines document retrieval with LLM answers. It improves accuracy by grounding answers in relevant sources.' },
+      { title: 'AI Agents', theory: 'AI agents use tools, memory, planning, and actions to complete multi-step tasks such as research, analysis, and automation.' },
+    ],
   },
 ];
 
-const chapters = syllabus.slice(0, 4).map((item) => ({ icon: item.icon, title: item.title, text: item.theory.slice(0, 135) + '...', link: item.video, tag: item.level }));
+const chapters = syllabus.slice(0, 4).map((item) => ({ icon: item.icon, title: item.title, text: item.theory.slice(0, 135) + '...', tag: item.level }));
 
 const baseQuiz = {
   python: [
@@ -103,16 +117,10 @@ const baseQuiz = {
   ],
 };
 
-const resources = [
-  ['NumPy Documentation', 'https://numpy.org/doc/'],
-  ['Scikit-Learn Guide', 'https://scikit-learn.org/stable/'],
-  ['Kaggle Datasets', 'https://www.kaggle.com/'],
-  ['Python Docs', 'https://docs.python.org/3/'],
-];
-
+const resources = [['NumPy Documentation', 'https://numpy.org/doc/'], ['Scikit-Learn Guide', 'https://scikit-learn.org/stable/'], ['Kaggle Datasets', 'https://www.kaggle.com/'], ['Python Docs', 'https://docs.python.org/3/']];
 const topicNames = { python: 'Python', statistics: 'Statistics', ml: 'Machine Learning', nlp: 'NLP' };
 const dailyTasks = ['Solve 10 MCQs', 'Read one theory chapter', 'Practice one Python notebook', 'Write one SQL query', 'Review one ML concept'];
-const defaultUser = { name: '', score: 0, answered: 0, completedTasks: [], lastTopic: 'python' };
+const defaultUser = { name: '', score: 0, answered: 0, completedTasks: [], lastTopic: 'python', completedSubtopics: [] };
 
 function getDailyQuiz(topic) {
   const source = baseQuiz[topic] || baseQuiz.python;
@@ -134,6 +142,7 @@ export default function DataSciencePro() {
   const [chatLoading, setChatLoading] = useState(false);
   const [messages, setMessages] = useState([{ role: 'assistant', text: 'Ask me anything about Data Science, Python, ML, NLP, or Gen AI.' }]);
   const [openSyllabus, setOpenSyllabus] = useState(0);
+  const [openSubtopic, setOpenSubtopic] = useState(0);
 
   useEffect(() => {
     try {
@@ -146,95 +155,47 @@ export default function DataSciencePro() {
     } catch {}
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  }, [user]);
+  useEffect(() => { localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); }, [user]);
 
   const questions = useMemo(() => getDailyQuiz(topic), [topic]);
   const currentQuestion = questions[questionIndex];
   const quizTitle = `${topicNames[topic]} Daily Challenge`;
-  const progressPercent = Math.min(100, Math.round((user.answered / 100) * 100));
+  const completedSubtopics = user.completedSubtopics || [];
+  const totalSubtopics = syllabus.reduce((sum, item) => sum + item.subtopics.length, 0);
+  const syllabusProgress = Math.round((completedSubtopics.length / totalSubtopics) * 100);
+  const progressPercent = Math.min(100, Math.round(((user.answered / 100) * 50) + ((completedSubtopics.length / totalSubtopics) * 50)));
+  const activeModule = syllabus[openSyllabus];
+  const activeSubtopic = activeModule.subtopics[openSubtopic] || activeModule.subtopics[0];
+  const activeSubtopicKey = `${activeModule.key}:${activeSubtopic.title}`;
+  const activeModuleCompleted = activeModule.subtopics.every((sub) => completedSubtopics.includes(`${activeModule.key}:${sub.title}`));
+  const activeModuleProgress = Math.round((activeModule.subtopics.filter((sub) => completedSubtopics.includes(`${activeModule.key}:${sub.title}`)).length / activeModule.subtopics.length) * 100);
 
-  function saveName(event) {
-    event.preventDefault();
-    const clean = nameInput.trim();
-    if (!clean) return;
-    setUser((current) => ({ ...current, name: clean }));
-    setNameInput('');
-  }
-
-  function loadTopic(nextTopic) {
-    setTopic(nextTopic);
-    setQuestionIndex(0);
-    setSelectedAnswer('');
-    setUser((current) => ({ ...current, lastTopic: nextTopic }));
-    document.getElementById('quiz-section')?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  function chooseAnswer(option) {
-    if (!currentQuestion || selectedAnswer) return;
-    setSelectedAnswer(option);
-    const correct = option === currentQuestion.a;
-    setUser((current) => ({ ...current, score: current.score + (correct ? 1 : 0), answered: current.answered + 1 }));
-  }
-
-  function nextQuestion() {
-    setQuestionIndex((value) => (value + 1) % questions.length);
-    setSelectedAnswer('');
-  }
-
-  function toggleTask(task) {
-    setUser((current) => ({ ...current, completedTasks: current.completedTasks.includes(task) ? current.completedTasks.filter((item) => item !== task) : [...current.completedTasks, task] }));
-  }
+  function saveName(event) { event.preventDefault(); const clean = nameInput.trim(); if (!clean) return; setUser((current) => ({ ...current, name: clean })); setNameInput(''); }
+  function loadTopic(nextTopic) { setTopic(nextTopic); setQuestionIndex(0); setSelectedAnswer(''); setUser((current) => ({ ...current, lastTopic: nextTopic })); document.getElementById('quiz-section')?.scrollIntoView({ behavior: 'smooth' }); }
+  function chooseAnswer(option) { if (!currentQuestion || selectedAnswer) return; setSelectedAnswer(option); const correct = option === currentQuestion.a; setUser((current) => ({ ...current, score: current.score + (correct ? 1 : 0), answered: current.answered + 1 })); }
+  function nextQuestion() { setQuestionIndex((value) => (value + 1) % questions.length); setSelectedAnswer(''); }
+  function toggleTask(task) { setUser((current) => ({ ...current, completedTasks: current.completedTasks.includes(task) ? current.completedTasks.filter((item) => item !== task) : [...current.completedTasks, task] })); }
+  function selectSyllabus(index) { setOpenSyllabus(index); setOpenSubtopic(0); }
+  function toggleSubtopicComplete(key = activeSubtopicKey) { setUser((current) => { const list = current.completedSubtopics || []; return { ...current, completedSubtopics: list.includes(key) ? list.filter((item) => item !== key) : [...list, key] }; }); }
 
   async function sendMessage() {
-    const text = chatInput.trim();
-    if (!text) return;
-    setMessages((current) => [...current, { role: 'user', text }]);
-    setChatInput('');
-    setChatLoading(true);
-    try {
-      const response = await fetch('/api/assistant', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text, topic: topicNames[topic] }) });
-      const data = await response.json();
-      setMessages((current) => [...current, { role: 'assistant', text: data.reply || 'No response received.' }]);
-    } catch {
-      setMessages((current) => [...current, { role: 'assistant', text: 'Fallback: Break the concept into definition, example, code/formula, and practice task.' }]);
-    } finally {
-      setChatLoading(false);
-    }
+    const text = chatInput.trim(); if (!text) return; setMessages((current) => [...current, { role: 'user', text }]); setChatInput(''); setChatLoading(true);
+    try { const response = await fetch('/api/assistant', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text, topic: topicNames[topic] }) }); const data = await response.json(); setMessages((current) => [...current, { role: 'assistant', text: data.reply || 'No response received.' }]); }
+    catch { setMessages((current) => [...current, { role: 'assistant', text: 'Fallback: Break the concept into definition, example, code/formula, and practice task.' }]); }
+    finally { setChatLoading(false); }
   }
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
-      <nav className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-          <a href="#home" className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-xl text-white shadow-lg shadow-blue-600/25">⌁</span><span className="text-xl font-black tracking-tight">DS/ML <span className="text-blue-600">Hub</span></span></a>
-          <ul className={`${menuOpen ? 'flex' : 'hidden'} absolute left-4 right-4 top-20 flex-col gap-3 rounded-3xl border bg-white p-5 shadow-xl md:static md:flex md:flex-row md:items-center md:border-0 md:bg-transparent md:p-0 md:shadow-none`}>
-            <li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#dashboard">Dashboard</a></li>
-            <li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#syllabus">Syllabus</a></li>
-            <li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#theory">Theory</a></li>
-            <li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#quiz-section">Quiz</a></li>
-            <li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#ai-chat">AI Chat</a></li>
-            <li><a className="rounded-full bg-blue-600 px-5 py-2.5 font-bold text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700" href="#topics">Start</a></li>
-          </ul>
-          <button type="button" onClick={() => setMenuOpen((value) => !value)} className="rounded-xl border px-3 py-2 text-xl md:hidden">☰</button>
-        </div>
-      </nav>
+      <nav className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl"><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6"><a href="#home" className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-xl text-white shadow-lg shadow-blue-600/25">⌁</span><span className="text-xl font-black tracking-tight">DS/ML <span className="text-blue-600">Hub</span></span></a><ul className={`${menuOpen ? 'flex' : 'hidden'} absolute left-4 right-4 top-20 flex-col gap-3 rounded-3xl border bg-white p-5 shadow-xl md:static md:flex md:flex-row md:items-center md:border-0 md:bg-transparent md:p-0 md:shadow-none`}><li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#dashboard">Dashboard</a></li><li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#syllabus">Syllabus</a></li><li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#quiz-section">Quiz</a></li><li><a className="font-semibold text-slate-700 hover:text-blue-600" href="#ai-chat">AI Chat</a></li><li><a className="rounded-full bg-blue-600 px-5 py-2.5 font-bold text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700" href="#topics">Start</a></li></ul><button type="button" onClick={() => setMenuOpen((value) => !value)} className="rounded-xl border px-3 py-2 text-xl md:hidden">☰</button></div></nav>
 
-      <header id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#dbeafe,#ffffff_36%,#eff6ff)]">
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-6 lg:py-28">
-          <div><div className="inline-flex rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 shadow-sm">In-site syllabus • Video links • Full theory notes</div><h1 className="mt-7 max-w-4xl text-5xl font-black tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">Master Data Science & AI with a focused study hub.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Learn with built-in theory, clickable syllabus, curated video links, daily MCQs, AI help, and a progress dashboard.</p><div className="mt-8 flex flex-wrap gap-4"><a href="#syllabus" className="rounded-2xl bg-blue-600 px-7 py-4 font-black text-white shadow-xl shadow-blue-600/25 hover:bg-blue-700">Open Syllabus</a><a href="#quiz-section" className="rounded-2xl border border-slate-300 bg-white px-7 py-4 font-black text-slate-800 shadow-sm hover:bg-slate-50">Start Quiz</a></div></div>
-          <div className="rounded-[2rem] border bg-white p-4 shadow-2xl shadow-blue-900/10"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Data dashboard" className="h-80 w-full rounded-[1.5rem] object-cover" /></div>
-        </div>
-      </header>
+      <header id="home" className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#dbeafe,#ffffff_36%,#eff6ff)]"><div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-6 lg:py-28"><div><div className="inline-flex rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 shadow-sm">Subtopic theory • Progress tracking • Video learning</div><h1 className="mt-7 max-w-4xl text-5xl font-black tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">Master Data Science & AI with a focused study hub.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Learn with built-in theory, clickable subtopics, video links, daily MCQs, AI help, and per-topic progress tracking.</p><div className="mt-8 flex flex-wrap gap-4"><a href="#syllabus" className="rounded-2xl bg-blue-600 px-7 py-4 font-black text-white shadow-xl shadow-blue-600/25 hover:bg-blue-700">Open Syllabus</a><a href="#quiz-section" className="rounded-2xl border border-slate-300 bg-white px-7 py-4 font-black text-slate-800 shadow-sm hover:bg-slate-50">Start Quiz</a></div></div><div className="rounded-[2rem] border bg-white p-4 shadow-2xl shadow-blue-900/10"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Data dashboard" className="h-80 w-full rounded-[1.5rem] object-cover" /></div></div></header>
 
-      <section id="dashboard" className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-        <div className="rounded-[2rem] border bg-white p-6 shadow-sm"><div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><div><p className="font-black uppercase tracking-widest text-blue-600">User dashboard</p><h2 className="mt-1 text-3xl font-black">{user.name ? `Welcome, ${user.name}` : 'Create your local profile'}</h2><p className="text-slate-600">Progress is saved in your browser.</p></div><form onSubmit={saveName} className="flex gap-2"><input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder="Enter name" className="rounded-2xl border px-4 py-3 outline-none focus:border-blue-500" /><button className="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white">Save</button></form></div><div className="mt-6 grid gap-4 md:grid-cols-4"><div className="rounded-2xl bg-blue-50 p-5"><p className="text-3xl font-black text-blue-600">{progressPercent}%</p><p className="text-sm text-slate-600">Daily progress</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{user.score}</p><p className="text-sm text-slate-600">Correct answers</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{user.answered}</p><p className="text-sm text-slate-600">Questions answered</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{user.completedTasks.length}/{dailyTasks.length}</p><p className="text-sm text-slate-600">Tasks complete</p></div></div><div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-blue-600" style={{ width: `${progressPercent}%` }} /></div></div>
-      </section>
+      <section id="dashboard" className="mx-auto max-w-7xl px-4 py-12 lg:px-6"><div className="rounded-[2rem] border bg-white p-6 shadow-sm"><div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><div><p className="font-black uppercase tracking-widest text-blue-600">User dashboard</p><h2 className="mt-1 text-3xl font-black">{user.name ? `Welcome, ${user.name}` : 'Create your local profile'}</h2><p className="text-slate-600">Progress is saved in your browser.</p></div><form onSubmit={saveName} className="flex gap-2"><input value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder="Enter name" className="rounded-2xl border px-4 py-3 outline-none focus:border-blue-500" /><button className="rounded-2xl bg-blue-600 px-5 py-3 font-black text-white">Save</button></form></div><div className="mt-6 grid gap-4 md:grid-cols-4"><div className="rounded-2xl bg-blue-50 p-5"><p className="text-3xl font-black text-blue-600">{progressPercent}%</p><p className="text-sm text-slate-600">Overall progress</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{syllabusProgress}%</p><p className="text-sm text-slate-600">Syllabus progress</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{completedSubtopics.length}/{totalSubtopics}</p><p className="text-sm text-slate-600">Subtopics complete</p></div><div className="rounded-2xl bg-slate-50 p-5"><p className="text-3xl font-black">{user.score}/{user.answered}</p><p className="text-sm text-slate-600">Quiz score</p></div></div><div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-blue-600" style={{ width: `${progressPercent}%` }} /></div></div></section>
 
-      <section id="syllabus" className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="mb-10 text-center"><p className="font-black uppercase tracking-widest text-blue-600">Complete syllabus</p><h2 className="mt-2 text-4xl font-black text-slate-950">Clickable syllabus with video links</h2><p className="mt-3 text-slate-600">Every module includes theory directly on this website. Videos open separately for practice.</p></div><div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]"><div className="space-y-3">{syllabus.map((item, index) => <button key={item.key} onClick={() => setOpenSyllabus(index)} className={`w-full rounded-3xl border p-5 text-left transition hover:-translate-y-1 ${openSyllabus === index ? 'border-blue-600 bg-blue-50 shadow-lg shadow-blue-600/10' : 'bg-white hover:bg-slate-50'}`}><div className="flex items-center gap-3"><span className="text-3xl">{item.icon}</span><div><h3 className="font-black text-slate-950">{index + 1}. {item.title}</h3><p className="text-sm text-slate-500">{item.level}</p></div></div></button>)}</div><article className="rounded-[2rem] border bg-white p-7 shadow-xl shadow-slate-900/5"><div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"><div><p className="text-4xl">{syllabus[openSyllabus].icon}</p><h3 className="mt-3 text-3xl font-black text-slate-950">{syllabus[openSyllabus].title}</h3><p className="mt-1 text-sm font-bold text-blue-600">Level: {syllabus[openSyllabus].level}</p></div><a href={syllabus[openSyllabus].video} target="_blank" rel="noopener noreferrer" className="rounded-2xl bg-red-600 px-5 py-3 text-center font-black text-white hover:bg-red-700">Watch Video</a></div><p className="mt-6 text-lg leading-8 text-slate-700">{syllabus[openSyllabus].theory}</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{syllabus[openSyllabus].bullets.map((point) => <div key={point} className="rounded-2xl bg-slate-50 p-4 font-bold text-slate-700">✓ {point}</div>)}</div></article></div></section>
+      <section id="syllabus" className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="mb-10 text-center"><p className="font-black uppercase tracking-widest text-blue-600">Complete syllabus</p><h2 className="mt-2 text-4xl font-black text-slate-950">Clickable syllabus with subtopics</h2><p className="mt-3 text-slate-600">Each subtopic has theory inside the website and completion tracking.</p></div><div className="grid gap-5 lg:grid-cols-[0.7fr_1.3fr]"><div className="space-y-3">{syllabus.map((item, index) => { const done = item.subtopics.filter((sub) => completedSubtopics.includes(`${item.key}:${sub.title}`)).length; const pct = Math.round((done / item.subtopics.length) * 100); return <button key={item.key} onClick={() => selectSyllabus(index)} className={`w-full rounded-3xl border p-5 text-left transition hover:-translate-y-1 ${openSyllabus === index ? 'border-blue-600 bg-blue-50 shadow-lg shadow-blue-600/10' : 'bg-white hover:bg-slate-50'}`}><div className="flex items-center gap-3"><span className="text-3xl">{item.icon}</span><div className="flex-1"><h3 className="font-black text-slate-950">{index + 1}. {item.title}</h3><p className="text-sm text-slate-500">{item.level} • {done}/{item.subtopics.length} complete</p><div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full bg-blue-600" style={{ width: `${pct}%` }} /></div></div></div></button>; })}</div><article className="rounded-[2rem] border bg-white p-7 shadow-xl shadow-slate-900/5"><div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"><div><p className="text-4xl">{activeModule.icon}</p><h3 className="mt-3 text-3xl font-black text-slate-950">{activeModule.title}</h3><p className="mt-1 text-sm font-bold text-blue-600">Level: {activeModule.level} • {activeModuleProgress}% complete {activeModuleCompleted ? '• Completed' : ''}</p></div><a href={activeModule.video} target="_blank" rel="noopener noreferrer" className="rounded-2xl bg-red-600 px-5 py-3 text-center font-black text-white hover:bg-red-700">Watch Video</a></div><p className="mt-6 text-lg leading-8 text-slate-700">{activeModule.theory}</p><div className="mt-8 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]"><div className="space-y-3">{activeModule.subtopics.map((sub, index) => { const key = `${activeModule.key}:${sub.title}`; const done = completedSubtopics.includes(key); return <button key={sub.title} onClick={() => setOpenSubtopic(index)} className={`w-full rounded-2xl border p-4 text-left font-bold ${openSubtopic === index ? 'border-blue-600 bg-blue-50 text-blue-700' : 'bg-slate-50 hover:bg-slate-100'}`}>{done ? '✅ ' : '○ '} {index + 1}. {sub.title}</button>; })}</div><div className="rounded-3xl bg-slate-50 p-6"><h4 className="text-2xl font-black text-slate-950">{activeSubtopic.title}</h4><p className="mt-4 leading-7 text-slate-700">{activeSubtopic.theory}</p><button onClick={() => toggleSubtopicComplete()} className={`mt-6 rounded-2xl px-5 py-3 font-black text-white ${completedSubtopics.includes(activeSubtopicKey) ? 'bg-slate-700 hover:bg-slate-800' : 'bg-green-600 hover:bg-green-700'}`}>{completedSubtopics.includes(activeSubtopicKey) ? 'Mark Incomplete' : 'Mark Complete'}</button></div></div></article></div></section>
 
-      <section id="theory" className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="mb-10 text-center"><p className="font-black uppercase tracking-widest text-blue-600">Theory modules</p><h2 className="mt-2 text-4xl font-black text-slate-950">Core Concepts</h2></div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{chapters.map((chapter) => <article key={chapter.title} className="group rounded-3xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"><div className="flex items-center justify-between"><div className="grid h-14 w-14 place-items-center rounded-2xl bg-blue-50 text-3xl">{chapter.icon}</div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">{chapter.tag}</span></div><h3 className="mt-5 text-xl font-black text-slate-950">{chapter.title}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{chapter.text}</p><a href="#syllabus" onClick={() => setOpenSyllabus(syllabus.findIndex((item) => item.title === chapter.title))} className="mt-5 inline-flex font-black text-blue-600 group-hover:underline">Read Theory Here →</a></article>)}</div></section>
+      <section id="theory" className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="mb-10 text-center"><p className="font-black uppercase tracking-widest text-blue-600">Theory modules</p><h2 className="mt-2 text-4xl font-black text-slate-950">Core Concepts</h2></div><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{chapters.map((chapter) => <article key={chapter.title} className="group rounded-3xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"><div className="flex items-center justify-between"><div className="grid h-14 w-14 place-items-center rounded-2xl bg-blue-50 text-3xl">{chapter.icon}</div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-600">{chapter.tag}</span></div><h3 className="mt-5 text-xl font-black text-slate-950">{chapter.title}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{chapter.text}</p><a href="#syllabus" onClick={() => { const index = syllabus.findIndex((item) => item.title === chapter.title); selectSyllabus(index < 0 ? 0 : index); }} className="mt-5 inline-flex font-black text-blue-600 group-hover:underline">Read Theory Here →</a></article>)}</div></section>
 
       <section className="bg-slate-950 px-4 py-16 text-white lg:px-6"><div className="mx-auto max-w-7xl"><div className="mb-10"><p className="font-black uppercase tracking-widest text-cyan-300">Daily tasks</p><h2 className="mt-2 text-4xl font-black">Build a habit, not just a page.</h2></div><div className="grid gap-4 md:grid-cols-5">{dailyTasks.map((task) => <button key={task} onClick={() => toggleTask(task)} className={`rounded-3xl border p-5 text-left font-black ${user.completedTasks.includes(task) ? 'border-green-400 bg-green-400/10 text-green-300' : 'border-white/10 bg-white/5 hover:bg-white/10'}`}>{user.completedTasks.includes(task) ? '✓ ' : ''}{task}</button>)}</div></div></section>
 
@@ -245,7 +206,6 @@ export default function DataSciencePro() {
       <section id="ai-chat" className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]"><div><p className="font-black uppercase tracking-widest text-blue-600">AI tutor</p><h2 className="mt-2 text-4xl font-black text-slate-950">Ask for help while you study.</h2><p className="mt-4 text-slate-600">Uses your backend API route. If OPENAI_API_KEY is missing, fallback tutor still works.</p></div><div className="rounded-[2rem] border bg-white p-6 shadow-xl"><div className="h-80 overflow-y-auto rounded-3xl bg-slate-50 p-4">{messages.map((msg, index) => <div key={index} className={`mb-3 rounded-2xl p-4 ${msg.role === 'user' ? 'ml-auto bg-blue-600 text-white' : 'bg-white text-slate-700 shadow-sm'} max-w-[85%]`}>{msg.text}</div>)}{chatLoading && <div className="rounded-2xl bg-white p-4 shadow-sm">Thinking...</div>}</div><div className="mt-4 flex gap-3"><input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }} placeholder="Ask about ML, Python, NLP..." className="min-w-0 flex-1 rounded-2xl border px-4 py-3 outline-none focus:border-blue-500" /><button onClick={sendMessage} className="rounded-2xl bg-blue-600 px-6 py-3 font-black text-white hover:bg-blue-700">Send</button></div></div></div></section>
 
       <section className="mx-auto max-w-7xl px-4 py-16 lg:px-6"><div className="rounded-[2rem] border bg-white p-8 shadow-sm"><h2 className="text-center text-4xl font-black text-slate-950">Reference Tools</h2><div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{resources.map(([label, href]) => <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="rounded-2xl border bg-slate-50 p-5 font-black text-blue-600 hover:border-blue-500 hover:bg-blue-50">{label} ↗</a>)}</div></div></section>
-
       <footer className="bg-slate-950 px-4 py-10 text-center text-slate-300"><p>© 2026 DS/ML Hub. Built for students by developers.</p></footer>
     </main>
   );
