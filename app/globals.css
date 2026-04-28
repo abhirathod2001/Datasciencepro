@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f3f4f6; }
+button, a { -webkit-tap-highlight-color: transparent; }
