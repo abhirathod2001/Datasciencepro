@@ -1,54 +1,86 @@
-export const questionBank = {
-  python: Array.from({ length: 100 }, (_, i) => ({
-    q: `Python for Data Science question ${i + 1}: Which concept is most relevant for practical data analysis workflow step ${i + 1}?`,
-    a: ['Pandas DataFrame operations', 'NumPy vectorized calculation', 'Data cleaning and validation', 'Visualization and reporting'][i % 4],
-    o: [
-      ['Pandas DataFrame operations', 'CSS animation timing', 'HTML meta tag setup', 'Browser tab grouping'][i % 4],
-      ['NumPy vectorized calculation', 'Social media captioning', 'Font icon loading', 'Domain renewal'][i % 4],
-      ['Data cleaning and validation', 'Button border styling', 'Router favicon setup', 'Image compression only'][i % 4],
-      ['Visualization and reporting', 'Navbar shadow color', 'Password reset email', 'Screen brightness'][i % 4],
-    ]
-  })),
-  statistics: Array.from({ length: 100 }, (_, i) => ({
-    q: `Statistics question ${i + 1}: Which idea helps data scientists reason about uncertainty in dataset case ${i + 1}?`,
-    a: ['Probability distribution', 'Confidence interval', 'Hypothesis testing', 'Variance and standard deviation'][i % 4],
-    o: [
-      ['Probability distribution', 'CSS gradient', 'Image alt text', 'Git branch icon'][i % 4],
-      ['Confidence interval', 'Footer alignment', 'Video thumbnail', 'Browser cache'][i % 4],
-      ['Hypothesis testing', 'Font weight', 'Header logo', 'File rename'][i % 4],
-      ['Variance and standard deviation', 'Card hover effect', 'Upload button', 'Tab title'][i % 4],
-    ]
-  })),
-  ml: Array.from({ length: 100 }, (_, i) => ({
-    q: `Machine Learning question ${i + 1}: Which ML concept is used in model-building scenario ${i + 1}?`,
-    a: ['Train-test split', 'Regression model', 'Classification metric', 'Clustering method'][i % 4],
-    o: [
-      ['Train-test split', 'CSS reset', 'HTML list item', 'Page favicon'][i % 4],
-      ['Regression model', 'Navbar padding', 'Image border radius', 'GitHub username'][i % 4],
-      ['Classification metric', 'Deployment screenshot', 'Text shadow', 'File extension only'][i % 4],
-      ['Clustering method', 'Browser bookmark', 'Footer copyright', 'Button icon'][i % 4],
-    ]
-  })),
-  nlp: Array.from({ length: 100 }, (_, i) => ({
-    q: `NLP question ${i + 1}: Which NLP concept is useful for language-processing task ${i + 1}?`,
-    a: ['Tokenization', 'Text preprocessing', 'Embeddings', 'Language modeling'][i % 4],
-    o: [
-      ['Tokenization', 'CSS z-index', 'Image cropping', 'Mouse pointer'][i % 4],
-      ['Text preprocessing', 'Header spacing', 'Git commit title', 'Browser shortcut'][i % 4],
-      ['Embeddings', 'Footer link color', 'Domain name', 'Screen recorder'][i % 4],
-      ['Language modeling', 'Button margin', 'Logo size', 'Tab close button'][i % 4],
-    ]
-  })),
+const topicTemplates = {
+  python: {
+    label: 'Python for Data Science',
+    skills: ['Python syntax', 'functions', 'lists', 'dictionaries', 'file handling', 'NumPy arrays', 'pandas Series', 'pandas DataFrames', 'missing values', 'duplicates', 'groupby', 'merge', 'pivot tables', 'matplotlib', 'EDA', 'CSV loading', 'JSON loading', 'data types', 'outliers', 'automation'],
+  },
+  statistics: {
+    label: 'Statistics and Probability',
+    skills: ['mean', 'median', 'variance', 'standard deviation', 'probability', 'conditional probability', 'independence', 'random variables', 'normal distribution', 'binomial distribution', 'Poisson distribution', 'sampling', 'confidence intervals', 'hypothesis testing', 'p-values', 'correlation', 'covariance', 'central limit theorem', 'descriptive statistics', 'inferential statistics'],
+  },
+  ml: {
+    label: 'Machine Learning',
+    skills: ['train-test split', 'cross-validation', 'linear regression', 'logistic regression', 'decision trees', 'random forest', 'KNN', 'SVM', 'K-Means', 'PCA', 'feature scaling', 'overfitting', 'underfitting', 'bias variance', 'precision', 'recall', 'F1 score', 'ROC AUC', 'regularization', 'model deployment'],
+  },
+  nlp: {
+    label: 'Natural Language Processing',
+    skills: ['tokenization', 'stopwords', 'stemming', 'lemmatization', 'POS tagging', 'NER', 'TF-IDF', 'embeddings', 'sentiment analysis', 'machine translation', 'language modeling', 'n-grams', 'transformers', 'LLMs', 'semantic search', 'RAG', 'chunking', 'text classification', 'summarization', 'prompting'],
+  },
 };
+
+function makeQuestion(topic, i) {
+  const config = topicTemplates[topic] || topicTemplates.python;
+  const skill = config.skills[i % config.skills.length];
+  const nextSkill = config.skills[(i + 5) % config.skills.length];
+  const wrong1 = config.skills[(i + 9) % config.skills.length];
+  const wrong2 = config.skills[(i + 13) % config.skills.length];
+  const styles = [
+    `In ${config.label}, which concept best solves a task involving ${skill}?`,
+    `A student is practicing ${skill}. Which option is the most correct?`,
+    `Which topic should you review for a question about ${skill}?`,
+    `For real project work, ${skill} is mainly connected to which data science skill?`,
+    `Which answer is most relevant when handling ${skill} in ${config.label}?`,
+  ];
+  const answer = skill;
+  const options = [answer, nextSkill, wrong1, wrong2];
+  const rotated = options.slice(i % 4).concat(options.slice(0, i % 4));
+  return {
+    id: i + 1,
+    q: styles[i % styles.length],
+    question: styles[i % styles.length],
+    a: answer,
+    answer,
+    o: rotated,
+    options: rotated,
+    explanation: `${skill} is the target concept for this question. Review this area if you answered incorrectly.`,
+    difficulty: i % 3 === 0 ? 'easy' : i % 3 === 1 ? 'medium' : 'hard',
+    skill,
+  };
+}
+
+export const questionBank = {
+  python: Array.from({ length: 100 }, (_, i) => makeQuestion('python', i)),
+  statistics: Array.from({ length: 100 }, (_, i) => makeQuestion('statistics', i)),
+  ml: Array.from({ length: 100 }, (_, i) => makeQuestion('ml', i)),
+  nlp: Array.from({ length: 100 }, (_, i) => makeQuestion('nlp', i)),
+};
+
+function seededRandom(seed) {
+  let value = seed % 2147483647;
+  if (value <= 0) value += 2147483646;
+  return () => {
+    value = (value * 16807) % 2147483647;
+    return (value - 1) / 2147483646;
+  };
+}
+
+function hashText(text) {
+  return String(text).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+}
 
 export function getUniqueDailyQuestions(topic, count = 100) {
   const bank = questionBank[topic] || questionBank.python;
   const today = new Date();
-  const seed = Number(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`);
-  const shuffled = [...bank].sort((a, b) => {
-    const hashA = Math.sin((a.q.length + seed) * 9999) % 1;
-    const hashB = Math.sin((b.q.length + seed) * 9999) % 1;
-    return hashA - hashB;
-  });
-  return shuffled.slice(0, count).map((item, index) => ({ ...item, id: index + 1, q: `Q${index + 1}. ${item.q}` }));
+  const seed = Number(`${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`) + hashText(topic);
+  const random = seededRandom(seed);
+  const shuffled = [...bank]
+    .map((item) => ({ item, sort: random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
+
+  return shuffled.slice(0, Math.min(count, shuffled.length)).map((item, index) => ({
+    ...item,
+    id: index + 1,
+    q: `Q${index + 1}. ${item.q}`,
+    question: item.q,
+  }));
 }
